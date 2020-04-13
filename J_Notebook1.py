@@ -17,10 +17,25 @@ M2 = 1.10 * Msun
 M3 = 0.144* Msun
 
 #dist between 1 and 2 is 23 AU
-array = np.array([x1, y1, x1p, y1p, x2, y2, x2p, y2p, x3, y3, x3p, y3p], float)
+array = np.array([0, 0, 0, 0,
+            2*AU, 0, 0, -.5*AU,
+            -.5*AU, 0, 0, 2*AU], float)
+
+
 
 #array = np.array([x1, y1, x1p, y1p, x2, y2, x2p, y2p, x3, y3, x3p, y3p], float)
 
+#setting the array values to appropriate vars
+x1 = array[0]
+y1 = array[1]
+x2 = array[4]
+y2 = array[5]
+x3 = array[8]
+y3 = array[9]
+
+startpoints = np.array([[x1,x2,x3],[y1,y2,y3]],float)
+
+#distances between each other
 r12 = ((x2-x1)**2+(y2-y1)**2)**(1/2)
 r23 = ((x3-x2)**2+(y3-y2)**2)**(1/2)
 r13 = ((x3-x1)**2+(y3-y1)**2)**(1/2)
@@ -75,20 +90,62 @@ def f(r,t):
 
 # In[14]:
 
+#set up our time limits over which to look at the populations
+a = 0.0
+b = 5*10.0*10**7
+N = 100000
+h = (b-a)/N
+
+#set a time array and empty lists for x and y
+tpoints = np.arange(a,b,h)
 
 #making empty lists :(
 l_x1, l_y1, l_vx1, l_vy1, l_x2, l_y2, l_vx2, l_vy2, l_x3, l_y3, l_vx3, l_vy3 = [], [], [], [], [], [], [], [], [], [], [], []
+
 #Runge-kutta method
 for t in tpoints:
     #we append the values to the lists
     l_x1.append(array[0])
     l_y1.append(array[1])
-    
+    l_vx1.append(array[2])
+    l_vy1.append(array[3])
+    l_x2.append(array[4])
+    l_y2.append(array[5])
+    l_vx2.append(array[6])
+    l_vy2.append(array[7])
+    l_x3.append(array[8])
+    l_y3.append(array[9])
+    l_vx3.append(array[10])
+    l_vy3.append(array[11])
+
     #then we run through all our k's
-    k1 = h*driven(array,t)
-    k2 = h*driven(array+0.5*k1,t+0.5*h)
-    k3 = h*driven(array+0.5*k2,t+0.5*h)
-    k4 = h*driven(array+k3,t+h)
+    k1 = h*f(array,t)
+    k2 = h*f(array+0.5*k1,t+0.5*h)
+    k3 = h*f(array+0.5*k2,t+0.5*h)
+    k4 = h*f(array+k3,t+h)
     #and add it on to the previous value of array
     array += (k1 + 2*k2 + 2*k3 + k4)/6
 
+
+#MAKING THE PLOT
+# definitions for the axes
+left, width = 0.1, 0.65
+bottom, height = 0.1, 0.65
+spacing = 0.01
+rect_scatter = [left, bottom, width, height]
+# start with a rectangular Figure
+plt.figure(figsize=(8, 8))
+ax_scatter = plt.axes(rect_scatter)
+ax_scatter.tick_params(direction='in', top=True, right=True)
+# the scatter plot:
+ax_scatter.scatter(l_x1, l_y1, color = 'k', alpha = .01)
+ax_scatter.scatter(l_x2, l_y2, color = 'b', alpha = .01)
+ax_scatter.scatter(l_x3, l_y3, color = 'orange', alpha = .01)
+ax_scatter.scatter(startpoints[0],startpoints[1],color= 'r')
+#limits
+#ax_scatter.set_xlim(1, rmax)
+#Formatting, Labels, & Legends
+plt.xlabel('spase')
+plt.ylabel('spase 2')
+plt.title('move')
+plt.show()
