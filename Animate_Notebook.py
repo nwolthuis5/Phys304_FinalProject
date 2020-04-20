@@ -18,25 +18,25 @@ M2 = 1.10 * Msun
 M3 = 0.144* Msun
 
 
-x1 = float(input("please provide a real value for x1 in units of AU: ")) * AU
-y1 = float(input("please provide a real value for y1 in units of AU: ")) * AU
-x1p = float(input("please provide a real value for x1 velocity in units of AU/s: ")) * AU
-y1p = float(input("please provide a real value for y1 velocity in units of AU/s: ")) * AU
+#x1 = float(input("please provide a real value for x1 in units of AU: ")) * AU
+#y1 = float(input("please provide a real value for y1 in units of AU: ")) * AU
+#x1p = float(input("please provide a real value for x1 velocity in units of AU/s: ")) * AU
+#y1p = float(input("please provide a real value for y1 velocity in units of AU/s: ")) * AU
 
-x2 = float(input("please provide a real value for x2 in units of AU/s: ")) * AU
-y2 = float(input("please provide a real value for y2 in units of AU/s: ")) * AU
-x2p = float(input("please provide a real value for x2 velocity in units of AU/s: ")) * AU
-y2p = float(input("please provide a real value for y2 velocity in units of AU/s: ")) * AU
+#x2 = float(input("please provide a real value for x2 in units of AU/s: ")) * AU
+#y2 = float(input("please provide a real value for y2 in units of AU/s: ")) * AU
+#x2p = float(input("please provide a real value for x2 velocity in units of AU/s: ")) * AU
+#y2p = float(input("please provide a real value for y2 velocity in units of AU/s: ")) * AU
 
-x3 = float(input("please provide a real value for x3 in units of AU: ")) * AU
-y3 = float(input("please provide a real value for y3 in units of AU: ")) * AU
-x3p = float(input("please provide a real value for x3 velocity in units of AU/s: ")) * AU
-y3p = float(input("please provide a real value for y3 velocity in units of AU/s: ")) * AU
+#x3 = float(input("please provide a real value for x3 in units of AU: ")) * AU
+#y3 = float(input("please provide a real value for y3 in units of AU: ")) * AU
+#x3p = float(input("please provide a real value for x3 velocity in units of AU/s: ")) * AU
+#y3p = float(input("please provide a real value for y3 velocity in units of AU/s: ")) * AU
 
 #dist between 1 and 2 is 23 AU
-array = np.array([x1, y1, x1p, y1p,
-                  x2, y2, x2p, y2p,
-                  x3, y3, x3p, y3p], float)
+array = np.array([0, 0, 0, 0,
+                  5*AU, 0, 0, -2*AU,
+                  -2*AU, 0, 0, 5*AU], float)
 #array2 = array
 #dist between 1 and 2 is 23 AU
 #array = np.array([0, 0, 0, 0,
@@ -105,8 +105,9 @@ def f(r,t):
 
 #set up our time limits over which to look at the populations
 a = 0.0
-b = 10** float(input("please provide a real value for n, for the equation t=10^n: "))
-N = 100000
+b = 10**4
+#float(input("please provide a real value for n, for the equation t=10^n: "))
+N = 10000
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
@@ -140,33 +141,6 @@ for t in tpoints:
     array += (k1 + 2*k2 + 2*k3 + k4)/6
 
 
-# In[4]:
-
-
-#MAKING THE PLOT
-# definitions for the axes
-left, width = 0.1, 0.65
-bottom, height = 0.1, 0.65
-spacing = 0.01
-rect_scatter = [left, bottom, width, height]
-# start with a rectangular Figure
-plt.figure(figsize=(8, 8))
-ax_scatter = plt.axes(rect_scatter)
-ax_scatter.tick_params(direction='in', top=True, right=True)
-# the scatter plot:
-ax_scatter.scatter(l_x1, l_y1, color = 'k', alpha = .01)
-ax_scatter.scatter(l_x2, l_y2, color = 'b', alpha = .01)
-ax_scatter.scatter(l_x3, l_y3, color = 'orange', alpha = .01)
-ax_scatter.scatter(startpoints[0],startpoints[1],color= 'r')
-#limits
-#ax_scatter.set_xlim(1, rmax)
-#Formatting, Labels, & Legends
-plt.xlabel('spase')
-plt.ylabel('spase 2')
-plt.title('move')
-plt.show()
-
-
 # In[13]:
 
 
@@ -175,21 +149,40 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+
+
 x_data = []
 y_data = []
 fig, ax = plt.subplots()
-#ax.set_xlim(0, 105)
-#ax.set_ylim(0,12)
+ax.set_xlim(-10**15, 10**15)
+ax.set_ylim(-10**15,10**15)
 line, = ax.plot(0,0)
 
-def animation_frame(i):
-    x_data = tpoints[i]
-    y_data = l_x1[0:i]
-    
+def animation_frame_1(i):
+    x_data.append(l_x1[i])
+    y_data.append(l_y1[i])
+
     line.set_xdata(x_data)
     line.set_ydata(y_data)
     return line,
 
-animation = FuncAnimation(fig, func = animation_frame, frames=len(tpoints), interval=10)
-plt.show()
+def animation_frame_2(i):
+    x_data.append(l_x2[i])
+    y_data.append(l_y2[i])
 
+    line.set_xdata(x_data)
+    line.set_ydata(y_data)
+    return line,
+
+def animation_frame_3(i):
+    x_data.append(l_x3[i])
+    y_data.append(l_y3[i])
+
+    line.set_xdata(x_data)
+    line.set_ydata(y_data)
+    return line,
+
+animation = FuncAnimation(fig, func = animation_frame_1, frames=len(tpoints), interval=10)
+animation2 = FuncAnimation(fig, func = animation_frame_2, frames=len(tpoints), interval=10)
+animation3 = FuncAnimation(fig, func = animation_frame_3, frames=len(tpoints), interval=10)
+plt.show()
