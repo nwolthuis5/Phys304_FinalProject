@@ -17,36 +17,36 @@ M1 = 9.07 * Msun
 M2 = 1.10 * Msun
 M3 = 0.144* Msun
 
-x1 = float(input("x1"))*AU
-y1 = float(input("y1"))*AU
-x2 = float(input("x2"))*AU
-y2 = float(input("y2"))*AU
-x3 = float(input("x3"))*AU
-y3 = float(input("y3"))*AU
+#x1 = float(input("x1"))*AU
+#y1 = float(input("y1"))*AU
+#x2 = float(input("x2"))*AU
+#y2 = float(input("y2"))*AU
+#x3 = float(input("x3"))*AU
+#y3 = float(input("y3"))*AU
 
-vx1 = float(input("vx1"))*AU
-vy1 = float(input("vy1"))*AU
-vx2 = float(input("vx2"))*AU
-vy2 = float(input("vy2"))*AU
-vx3 = float(input("vx3"))*AU
-vy3 = float(input("vy3"))*AU
+#vx1 = float(input("vx1"))*AU
+#vy1 = float(input("vy1"))*AU
+#vx2 = float(input("vx2"))*AU
+#vy2 = float(input("vy2"))*AU
+#vx3 = float(input("vx3"))*AU
+#vy3 = float(input("vy3"))*AU
 
 #dist between 1 and 2 is 23 AU
-array = np.array([x1, y1, vx1, vy1,
-    x2, y2, vx2, vy2,
-    x3, y3, vx3, vy3], float)
+array = np.array([0, 0, 0, 0,
+    5*AU, 0, 0, -AU,
+    -2*AU, 0, 0, AU], float)
 
 
 
 #array = np.array([x1, y1, x1p, y1p, x2, y2, x2p, y2p, x3, y3, x3p, y3p], float)
 
 #setting the array values to appropriate vars
-#x1 = array[0]
-#y1 = array[1]
-#x2 = array[4]
-#y2 = array[5]
-#x3 = array[8]
-#y3 = array[9]
+x1 = array[0]
+y1 = array[1]
+x2 = array[4]
+y2 = array[5]
+x3 = array[8]
+y3 = array[9]
 
 startpoints = np.array([[x1,x2,x3],[y1,y2,y3]],float)
 
@@ -107,7 +107,7 @@ def f(r,t):
 
 #set up our time limits over which to look at the populations
 a = 0.0
-b = 10.0
+b = 10**6
 N = 100000
 h = (b-a)/N
 
