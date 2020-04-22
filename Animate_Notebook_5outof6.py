@@ -64,10 +64,12 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-x1p = -1/2/100
-y1p = np.sqrt(3)/2/100
-x2p = 1/100
-y2p = 0
+factor= np.sqrt(G*3/3)
+
+x1p = -1/2 * factor
+y1p = np.sqrt(3)/2 * factor
+x2p = 1 * factor
+y2p = 0 * factor
 
 
 x1_mom = M1*x1p
