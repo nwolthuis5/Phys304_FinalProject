@@ -38,9 +38,9 @@ M3 = 1
 #y3p = float(input("please provide a real value for y3 velocity in units of AU/s: ")) * AU
 
 #dist between 1 and 2 is 23 AU
-array = np.array([0, 0, 0, 0,
-                  5, 0, 0, -1,
-                  -2, 0, 0, 10], float)
+#array = np.array([0, 0, 0, 0,
+#                  5, 0, 0, -1,
+#                  -2, 0, 0, 10], float)
 #array2 = array
 #dist between 1 and 2 is 23 AU
 #array = np.array([0, 0, 0, 0,
@@ -50,14 +50,43 @@ array = np.array([0, 0, 0, 0,
 #array = np.array([x1, y1, x1p, y1p, x2, y2, x2p, y2p, x3, y3, x3p, y3p], float)
 
 #setting the array values to appropriate vars
-x1 = array[0]
-y1 = array[1]
-x2 = array[4]
-y2 = array[5]
-x3 = array[8]
-y3 = array[9]
+#x1 = array[0]
+#y1 = array[1]
+#x2 = array[4]
+#y2 = array[5]
+#x3 = array[8]
+#y3 = array[9]
 
-startpoints = np.array([[x1,x2,x3],[y1,y2,y3]],float)
+x1 = -np.sqrt(3)
+y1 = -1
+x2 = 0
+y2 = 2
+x3 = np.sqrt(3)
+y3 = -1
+
+x1p = -1/2/100
+y1p = np.sqrt(3)/2/100
+x2p = 1/100
+y2p = 0
+
+
+x1_mom = M1*x1p
+y1_mom = M1*y1p
+
+x2_mom = M2*x2p
+y2_mom = M2*y2p
+
+x3_mom = -(x1_mom + x2_mom)
+x3p = x3_mom/M3
+
+y3_mom = -(y1_mom + y2_mom)
+y3p = y3_mom/M3
+
+#startpoints = np.array([[x1,x2,x3],[y1,y2,y3]],float)
+
+array = np.array([x1, y1, x1p, y1p,
+                  x2, y2, x2p, y2p,
+                  x3, y3, x3p, y3p], float)
 
 #distances between each other
 r12 = ((x2-x1)**2+(y2-y1)**2)**(1/2)
@@ -225,4 +254,5 @@ frame_number = int(len(tpoints))
 animation = FuncAnimation(fig, func = animation_frame_1, frames=frame_number, interval=1)
 animation2 = FuncAnimation(fig, func = animation_frame_2, frames=frame_number, interval=1)
 animation3 = FuncAnimation(fig, func = animation_frame_3, frames=frame_number, interval=1)
+
 plt.show()
