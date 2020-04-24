@@ -17,9 +17,9 @@ AU = 1
 #M2 = 1.10 * Msun
 #M3 = 0.144* Msun
 
-M1 = 1
-M2 = 1
-M3 = 1
+M1 = 5
+M2 = 4
+M3 = 3
 
 
 #x1 = float(input("please provide a real value for x1 in units of AU: ")) * AU
@@ -64,7 +64,7 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-factor= np.sqrt(G*3/3)
+factor= np.sqrt(G*((M1+M2+M3)/2))
 
 x1p = -1/2 * factor
 y1p = np.sqrt(3)/2 * factor
@@ -142,7 +142,7 @@ def f(r,t):
 a = 0.0
 b = 10**4
 #float(input("please provide a real value for n, for the equation t=10^n: "))
-N = 1000
+N = 50000
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
