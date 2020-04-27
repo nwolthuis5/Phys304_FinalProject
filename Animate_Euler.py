@@ -28,7 +28,7 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-factor= np.sqrt(G*3/3)
+factor= np.sqrt(G*3/3)/2
 
 x1p = -1/2 * factor
 y1p = np.sqrt(3)/2 * factor
@@ -106,7 +106,7 @@ def f(r,t):
 a = 0.0
 b = 10**4
 #float(input("please provide a real value for n, for the equation t=10^n: "))
-N = 1000
+N = 100000
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
@@ -143,7 +143,7 @@ for t in tpoints:
 # In[13]:
 
 
-
+#determining maximum values for our axes
 xmaxlist = np.concatenate([l_x1,l_x2,l_x3])
 xmaxlist = np.sort(np.abs(xmaxlist))
 x_max = xmaxlist[-1]
@@ -151,7 +151,10 @@ x_max = xmaxlist[-1]
 ymaxlist = np.concatenate([l_y1,l_y2,l_y3])
 ymaxlist = np.sort(np.abs(ymaxlist))
 y_max = ymaxlist[-1]
-print(x_max, y_max)
+
+maxlist = [y_max, x_max]
+maxlist = np.sort(np.abs(maxlist))
+maxval = maxlist[-1]
 
 #MAKING THE PLOT
 # definitions for the axes
@@ -181,8 +184,8 @@ print(x_max, y_max)
 x_data1, y_data1, x_data2, y_data2, x_data3, y_data3 = [],[],[],[],[],[]
 
 fig, ax = plt.subplots()
-ax.set_xlim(-x_max, x_max)
-ax.set_ylim(-y_max,y_max)
+ax.set_xlim(-maxval, maxval)
+ax.set_ylim(-maxval,maxval)
 line1, = ax.plot(0,0)
 line2, = ax.plot(0,0)
 line3, = ax.plot(0,0)
@@ -215,9 +218,9 @@ def animation_frame_3(i):
     line3.set_color('orange')
     return line3,
 
-frame_number = int(len(tpoints))
+frame_number =int(len(tpoints))
 
-animation = FuncAnimation(fig, func = animation_frame_1, frames=frame_number, interval=1)
+animation1 = FuncAnimation(fig, func = animation_frame_1, frames=frame_number, interval=1)
 animation2 = FuncAnimation(fig, func = animation_frame_2, frames=frame_number, interval=1)
 animation3 = FuncAnimation(fig, func = animation_frame_3, frames=frame_number, interval=1)
 
