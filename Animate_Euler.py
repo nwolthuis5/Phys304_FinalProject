@@ -106,7 +106,7 @@ def f(r,t):
 a = 0.0
 b = 10**4
 #float(input("please provide a real value for n, for the equation t=10^n: "))
-N = 100000
+N = 10000
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
@@ -183,7 +183,11 @@ maxval = maxlist[-1]
 
 x_data1, y_data1, x_data2, y_data2, x_data3, y_data3 = [],[],[],[],[],[]
 
-fig, ax = plt.subplots()
+#fig, ax = plt.subplots()
+fig = plt.figure()
+ax = fig.add_subplot(111, aspect='equal', autoscale_on=False)
+#ax.grid()
+
 ax.set_xlim(-maxval, maxval)
 ax.set_ylim(-maxval,maxval)
 line1, = ax.plot(0,0)
@@ -223,5 +227,28 @@ frame_number =int(len(tpoints))
 animation1 = FuncAnimation(fig, func = animation_frame_1, frames=frame_number, interval=1)
 animation2 = FuncAnimation(fig, func = animation_frame_2, frames=frame_number, interval=1)
 animation3 = FuncAnimation(fig, func = animation_frame_3, frames=frame_number, interval=1)
+
+# definitions for the axes
+left, width = 0.1, 0.65
+bottom, height = 0.1, 0.65
+spacing = 0.005
+
+
+rect_scatter = [left, bottom, width, height]
+rect_histx = [left, bottom + height + spacing, width, 0.2]
+rect_histy = [left + width + spacing, bottom, 0.2, height]
+
+# start with a rectangular Figure
+#plt.figure(figsize=(8, 8))
+
+
+#Formatting, Labels, & Legends
+#plt.xlabel('spase')
+#plt.ylabel('spase')
+#plt.title('Solution to 3 Body Problem')
+
+
+# Tweak spacing to prevent clipping of ylabel
+fig.tight_layout()
 
 plt.show()
