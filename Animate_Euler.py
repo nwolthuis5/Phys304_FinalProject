@@ -106,7 +106,7 @@ def f(r,t):
 a = 0.0
 b = 10**4
 #float(input("please provide a real value for n, for the equation t=10^n: "))
-N = 10000
+N = 100000
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
