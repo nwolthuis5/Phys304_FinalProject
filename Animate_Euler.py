@@ -250,5 +250,4 @@ rect_histy = [left + width + spacing, bottom, 0.2, height]
 
 # Tweak spacing to prevent clipping of ylabel
 fig.tight_layout()
-
 plt.show()
