@@ -19,11 +19,12 @@ M3 = float(input("please provide a real value for M3 in units of solar masses: "
 
 #this is the mass equivalent we decided to use for our initial conditions
 #it's based off the reduced mass for two bodies
-#there's an invisible constant of 1 mass^(-1) 
+#there's an invisible constant of 1 mass^(-1)
 M = (M1 * M2 * M3)/(M1 + M2 + M3)
 
 #initial positions
 #the bodies are placed at the vertices of an equilateral triangle
+#with side length 2* sqrt(3)
 x1 = -np.sqrt(3)
 y1 = -1
 x2 = 0
@@ -31,40 +32,52 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-#we decided to make a velocity based on the orbital velocity of a two body satellite rotation
+#we decided to make a velocity based on the orbital velocity of a satellite
+#it will scale with the masses
+#the distance from the origin to each point is 2
 orbital_R = 2
+
+#we multiply this starting velocity by trig stuff
+#to get the x and y components of it
 factor= np.sqrt(2*G*M/orbital_R)
 
+#here is where we get the x and y components
+#p stands for prime, as in the derivative
 x1p = -1/2 * factor
 y1p = np.sqrt(3)/2 * factor
 x2p = 1 * factor
 y2p = 0 * factor
 
-
+#we need the net momentum to be zero
+#so we define the first two momentums here
 x1_mom = M1*x1p
 y1_mom = M1*y1p
 
 x2_mom = M2*x2p
 y2_mom = M2*y2p
 
+#the third one is defined such that the total momentum
+#is zero
 x3_mom = -(x1_mom + x2_mom)
 x3p = x3_mom/M3
 
 y3_mom = -(y1_mom + y2_mom)
 y3p = y3_mom/M3
 
-#startpoints = np.array([[x1,x2,x3],[y1,y2,y3]],float)
 
+#setting up an array with starting values
+#for our runge kutta
 array = np.array([x1, y1, x1p, y1p,
                   x2, y2, x2p, y2p,
                   x3, y3, x3p, y3p], float)
 
-#distances between each other
+#distances between each pair of bodies
 r12 = ((x2-x1)**2+(y2-y1)**2)**(1/2)
 r23 = ((x3-x2)**2+(y3-y2)**2)**(1/2)
 r13 = ((x3-x1)**2+(y3-y1)**2)**(1/2)
 
 #we define a function to represent our system of equations
+#we have to have 12 variables, four for each body
 def f(r,t):
     #setting vars for M1
     u1 = array[0] #x1
@@ -107,17 +120,20 @@ def f(r,t):
 
     return np.array([u1p,u2p,u3p,u4p,u5p,u6p,u7p,u8p,u9p,u10p,u11p,u12p],float)
 
-#set up our time limits over which to look at the populations
+#set up our time limits over which to look at the system
 a = 0.0
 b = 10**4
-#float(input("please provide a real value for n, for the equation t=10^n: "))
+
+#this is the number of points we check at
 N = 100000
+#and the bin size for our time step
 h = (b-a)/N
 
 #set a time array and empty lists for x and y
 tpoints = np.arange(a,b,h)
 
-#making empty lists :(
+#making empty lists for runge kutta :(
+#we need a separate list for each velocity and position
 l_x1, l_y1, l_vx1, l_vy1, l_x2, l_y2, l_vx2, l_vy2, l_x3, l_y3, l_vx3, l_vy3 = [], [], [], [], [], [], [], [], [], [], [], []
 
 #Runge-kutta method
@@ -127,10 +143,12 @@ for t in tpoints:
     l_y1.append(array[1])
     l_vx1.append(array[2])
     l_vy1.append(array[3])
+
     l_x2.append(array[4])
     l_y2.append(array[5])
     l_vx2.append(array[6])
     l_vy2.append(array[7])
+
     l_x3.append(array[8])
     l_y3.append(array[9])
     l_vx3.append(array[10])
@@ -145,23 +163,27 @@ for t in tpoints:
     array += (k1 + 2*k2 + 2*k3 + k4)/6
 
 
-# In[13]:
-
 
 #determining maximum values for our axes
+#we want to make our axes go to the highest value that the system reaches
+#and we want it to be square to avoid warping the image
+#we make a list of all x's and find the largest one, then peel that off
 xmaxlist = np.concatenate([l_x1,l_x2,l_x3])
 xmaxlist = np.sort(np.abs(xmaxlist))
 x_max = xmaxlist[-1]
 
+#similarly for y
 ymaxlist = np.concatenate([l_y1,l_y2,l_y3])
 ymaxlist = np.sort(np.abs(ymaxlist))
 y_max = ymaxlist[-1]
 
+#we choose which one is bigger and that defines our axis limits
 maxlist = [y_max, x_max]
 maxlist = np.sort(np.abs(maxlist))
 maxval = maxlist[-1]
 
-#MAKING THE PLOT
+#code from when we were making static plots
+
 # definitions for the axes
 #left, width = 0.1, 0.65
 #bottom, height = 0.1, 0.65
@@ -185,75 +207,80 @@ maxval = maxlist[-1]
 #plt.title('move')
 #plt.show()
 
-
+#empty lists for animation
 x_data1, y_data1, x_data2, y_data2, x_data3, y_data3 = [],[],[],[],[],[]
 
-#fig, ax = plt.subplots()
+#defining parts of figure to be animated
 fig = plt.figure()
 ax = fig.add_subplot(111, aspect='equal', autoscale_on=False)
-#ax.grid()
 
+#choosing limits
 ax.set_xlim(-maxval, maxval)
 ax.set_ylim(-maxval,maxval)
+#defining the lines to be animated
 line1, = ax.plot(0,0)
 line2, = ax.plot(0,0)
 line3, = ax.plot(0,0)
 
+#animation 1
+#it will plot the entire set of points from the beginning til the current time
 def animation_frame_1(i):
-    x_data1.append(l_x1[i])
+    x_data1.append(l_x1[i]) #appending each new step from the runge kutta
     y_data1.append(l_y1[i])
 
-    line1.set_xdata(x_data1)
+    line1.set_xdata(x_data1) #pairing it with the animated line
     line1.set_ydata(y_data1)
-    line1.set_color('k')
+    line1.set_color('k') #make M1 black
     return line1,
 
-
+#animation 2
 def animation_frame_2(i):
-    x_data2.append(l_x2[i])
+    x_data2.append(l_x2[i]) #appending each new step from the runge kutta
     y_data2.append(l_y2[i])
 
-    line2.set_xdata(x_data2)
+    line2.set_xdata(x_data2) #pairing it with the animated line
     line2.set_ydata(y_data2)
-    line2.set_color('b')
+    line2.set_color('b') #make M2 blue
     return line2,
 
+#animation 3
 def animation_frame_3(i):
-    x_data3.append(l_x3[i])
+    x_data3.append(l_x3[i]) #appending each new step from the runge kutta
     y_data3.append(l_y3[i])
 
-    line3.set_xdata(x_data3)
+    line3.set_xdata(x_data3) #pairing it with the animated line
     line3.set_ydata(y_data3)
-    line3.set_color('orange')
+    line3.set_color('orange') #make M3 orange
     return line3,
 
+#number of frames is the same as the number of time points
 frame_number =int(len(tpoints))
 
+#actually putting the animations down
+#func tells it which array to look at
+#frames is the number of frames
+#interval is the amount of time between frames in ms
 animation1 = FuncAnimation(fig, func = animation_frame_1, frames=frame_number, interval=1)
 animation2 = FuncAnimation(fig, func = animation_frame_2, frames=frame_number, interval=1)
 animation3 = FuncAnimation(fig, func = animation_frame_3, frames=frame_number, interval=1)
 
-# definitions for the axes
+#spacing for the axes
 left, width = 0.1, 0.65
 bottom, height = 0.1, 0.65
 spacing = 0.005
-
 
 rect_scatter = [left, bottom, width, height]
 rect_histx = [left, bottom + height + spacing, width, 0.2]
 rect_histy = [left + width + spacing, bottom, 0.2, height]
 
-# start with a rectangular Figure
-#plt.figure(figsize=(8, 8))
 
 
-#Formatting, Labels, & Legends
+#axis labels
 plt.xlabel('X Distance from Center in AU')
 plt.ylabel('Y Distance from Center in AU')
 
-#plt.title('Solution to 3 Body Problem')
 
 
-# Tweak spacing to prevent clipping of ylabel
+#tweak spacing to prevent clipping of ylabel
 fig.tight_layout()
 plt.show()
