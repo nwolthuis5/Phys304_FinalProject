@@ -1,28 +1,29 @@
-
-# coding: utf-8
-
-# In[3]:
-
-
+#importing packages
 import numpy as np
 import matplotlib.pyplot as plt
+#this is the package we use to do the animations
 from matplotlib.animation import FuncAnimation
 
-#Defining Constant
+#defining constants
+#we used units of AU, solar masses, and days
 G = 3*10**(-4) #AU^3/Solar mass days^2
 Msun = 1
 AU = 1
-#1 is ACB, 2 is ACA, 3 is Barnard's
-#M1 = 9.07 * Msun
-#M2 = 1.10 * Msun
-#M3 = 0.144* Msun
 
+
+#user inputs for the mass ratios of our three bodies
+#we used the convention that M1 was largest and M3 smallest
 M1 = float(input("please provide a real value for M1 in units of solar masses: "))
 M2 = float(input("please provide a real value for M2 in units of solar masses: "))
 M3 = float(input("please provide a real value for M3 in units of solar masses: "))
 
+#this is the mass equivalent we decided to use for our initial conditions
+#it's based off the reduced mass for two bodies
+#there's an invisible constant of 1 mass^(-1) 
 M = (M1 * M2 * M3)/(M1 + M2 + M3)
 
+#initial positions
+#the bodies are placed at the vertices of an equilateral triangle
 x1 = -np.sqrt(3)
 y1 = -1
 x2 = 0
@@ -30,7 +31,9 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-factor= np.sqrt(G*M)
+#we decided to make a velocity based on the orbital velocity of a two body satellite rotation
+orbital_R = 2
+factor= np.sqrt(2*G*M/orbital_R)
 
 x1p = -1/2 * factor
 y1p = np.sqrt(3)/2 * factor
@@ -247,7 +250,7 @@ rect_histy = [left + width + spacing, bottom, 0.2, height]
 #Formatting, Labels, & Legends
 plt.xlabel('X Distance from Center in AU')
 plt.ylabel('Y Distance from Center in AU')
- 
+
 #plt.title('Solution to 3 Body Problem')
 
 
