@@ -21,6 +21,8 @@ M1 = float(input("please provide a real value for M1 in units of solar masses: "
 M2 = float(input("please provide a real value for M2 in units of solar masses: "))
 M3 = float(input("please provide a real value for M3 in units of solar masses: "))
 
+M = (M1 * M2 * M3)/(M1 + M2 + M3)
+
 x1 = -np.sqrt(3)
 y1 = -1
 x2 = 0
@@ -28,7 +30,7 @@ y2 = 2
 x3 = np.sqrt(3)
 y3 = -1
 
-factor= np.sqrt(G*3/3)/2
+factor= np.sqrt(G*M)
 
 x1p = -1/2 * factor
 y1p = np.sqrt(3)/2 * factor
