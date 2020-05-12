@@ -243,8 +243,9 @@ rect_histy = [left + width + spacing, bottom, 0.2, height]
 
 
 #Formatting, Labels, & Legends
-#plt.xlabel('spase')
-#plt.ylabel('spase')
+plt.xlabel('X Distance from Center in AU')
+plt.ylabel('Y Distance from Center in AU')
+ 
 #plt.title('Solution to 3 Body Problem')
 
 
