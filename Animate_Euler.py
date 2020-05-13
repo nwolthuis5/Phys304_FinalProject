@@ -125,7 +125,7 @@ a = 0.0
 b = 10**4
 
 #this is the number of points we check at
-N = 100000
+N = 10000
 #and the bin size for our time step
 h = (b-a)/N
 
